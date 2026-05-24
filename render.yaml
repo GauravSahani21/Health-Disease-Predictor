@@ -16,6 +16,7 @@ services:
   - type: web
     name: health-predictor-backend
     env: docker
+    plan: free
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
     envVars:
@@ -33,38 +34,10 @@ services:
       - key: GOOGLE_AI_API_KEY
         sync: false # You MUST set this manually in the Render Dashboard!
       - key: TEXT_ML_URL
-        value: http://ml-text:8001
+        value: http://localhost:8001
       - key: IMAGE_ML_URL
-        value: http://ml-image:8002
+        value: http://localhost:8002
       - key: BRAIN_ML_URL
-        value: http://ml-brain:8003
+        value: http://localhost:8003
       - key: FACE_ML_URL
-        value: http://ml-face:8004
-
-  # 3. ML Text Service (Private)
-  - type: pserv
-    name: ml-text
-    env: docker
-    dockerfilePath: ./ml_text/Dockerfile
-    dockerContext: ./ml_text
-
-  # 4. ML Image Service (Private)
-  - type: pserv
-    name: ml-image
-    env: docker
-    dockerfilePath: ./ml_image/Dockerfile
-    dockerContext: ./ml_image
-
-  # 5. ML Brain Service (Private)
-  - type: pserv
-    name: ml-brain
-    env: docker
-    dockerfilePath: ./ml_brain/Dockerfile
-    dockerContext: ./ml_brain
-
-  # 6. ML Face Service (Private)
-  - type: pserv
-    name: ml-face
-    env: docker
-    dockerfilePath: ./ml_face/Dockerfile
-    dockerContext: ./ml_face
+        value: http://localhost:8004
