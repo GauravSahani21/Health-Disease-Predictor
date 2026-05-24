@@ -1,0 +1,13 @@
+{
+  "classes": [
+    "glioma",
+    "meningioma",
+    "normal",
+    "pituitary"
+  ],
+  "num_classes": 4,
+  "model_name": "efficientnet_b1",
+  "best_val_acc": 37.5,
+  "training_date": "2026-01-10T23:36:16.002701",
+  "epochs": 1
+}

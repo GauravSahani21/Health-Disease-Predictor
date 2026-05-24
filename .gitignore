@@ -1,0 +1,48 @@
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Dependencies
+node_modules/
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Build outputs
+dist/
+build/
+coverage/
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+*.egg-info/
+
+# Docker
+.dockerignore
+
+# Kubernetes secrets
+infra/k8s/secrets.yaml
+
+# Large files
+*.pkl
+*.pth
+*.h5
+*.onnx
+*.joblib
+data/
+datasets/
+Dataset/
