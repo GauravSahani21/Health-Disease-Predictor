@@ -6,8 +6,12 @@ mkdir -p logs
 echo "🚀 Starting all services in background..."
 echo "📝 Logs will be saved to logs/ directory"
 
-# Export Google AI API Key (New)
-export GOOGLE_AI_API_KEY=AIzaSyDh84MdWSnLuQ2niphbZXhNDzwMFm49Qz0
+# Make sure your GOOGLE_AI_API_KEY is securely inside backend/.env
+# Do NOT hardcode it here.
+
+echo "🐳 Wait! Did you know this project is Dockerized?"
+echo "If you have Docker installed, simply run: docker-compose up -d"
+echo "--------------------------------------------------------"
 
 # Start Backend
 echo "Starting Backend (Port 5000)..."

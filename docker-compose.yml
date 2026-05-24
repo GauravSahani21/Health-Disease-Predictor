@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - health-net
+    restart: always
+
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./backend/.env
+    environment:
+      - NODE_ENV=production
+      - FRONTEND_URL=http://localhost:3000
+      - TEXT_ML_URL=http://ml_text:8001
+      - IMAGE_ML_URL=http://ml_image:8002
+      - BRAIN_ML_URL=http://ml_brain:8003
+      - FACE_ML_URL=http://ml_face:8004
+    depends_on:
+      - ml_text
+      - ml_image
+      - ml_brain
+      - ml_face
+    networks:
+      - health-net
+    restart: always
+
+  ml_text:
+    build: ./ml_text
+    ports:
+      - "8001:8001"
+    networks:
+      - health-net
+    restart: always
+
+  ml_image:
+    build: ./ml_image
+    ports:
+      - "8002:8002"
+    networks:
+      - health-net
+    restart: always
+
+  ml_brain:
+    build: ./ml_brain
+    ports:
+      - "8003:8003"
+    networks:
+      - health-net
+    restart: always
+
+  ml_face:
+    build: ./ml_face
+    ports:
+      - "8004:8004"
+    networks:
+      - health-net
+    restart: always
+
+networks:
+  health-net:
+    driver: bridge
