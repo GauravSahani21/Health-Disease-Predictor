@@ -72,19 +72,33 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Root endpoint
-app.get('/', (req, res) => {
-  res.json({
-    message: 'Health Disease Predictor & Advisor API',
-    version: '1.0.0',
-    endpoints: {
-      auth: '/api/auth',
-      predict: '/api/predict',
-      history: '/api/history',
-      health: '/health',
-    },
+// Serve frontend static files in production
+if (process.env.NODE_ENV === 'production') {
+  const frontendBuildPath = path.join(__dirname, '../frontend/dist');
+  app.use(express.static(frontendBuildPath));
+  
+  // Catch-all route to serve the React index.html for client-side routing
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api') || req.path.startsWith('/uploads') || req.path === '/health') {
+      return next();
+    }
+    res.sendFile(path.join(frontendBuildPath, 'index.html'));
   });
-});
+} else {
+  // Root endpoint (development only)
+  app.get('/', (req, res) => {
+    res.json({
+      message: 'Health Disease Predictor & Advisor API',
+      version: '1.0.0',
+      endpoints: {
+        auth: '/api/auth',
+        predict: '/api/predict',
+        history: '/api/history',
+        health: '/health',
+      },
+    });
+  });
+}
 
 // 404 handler
 app.use((req, res) => {
