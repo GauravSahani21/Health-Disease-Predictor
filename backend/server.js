@@ -141,12 +141,16 @@ const connectWithRetry = () => {
 connectWithRetry();
 
 // Graceful shutdown
-process.on('SIGTERM', () => {
+process.on('SIGTERM', async () => {
   logger.info('SIGTERM signal received: closing HTTP server');
-  mongoose.connection.close(false, () => {
+  try {
+    await mongoose.connection.close(false);
     logger.info('MongoDB connection closed');
     process.exit(0);
-  });
+  } catch (err) {
+    logger.error('Error closing MongoDB connection', { error: err.message });
+    process.exit(1);
+  }
 });
 
 // Start server
