@@ -461,6 +461,9 @@ router.post(
       // Call ML Text Service (Local), with fallback
       let finalResponse;
       try {
+        if (process.env.USE_API_ONLY === 'true' || process.env.RENDER === 'true') {
+          throw new Error('Skipping local ML models on Render, using API fallback immediately.');
+        }
         const mlServiceUrl = process.env.TEXT_ML_URL || 'http://localhost:8001';
         console.log(`[Text Prediction] Calling ML Service at ${mlServiceUrl} with corrected text`);
         
@@ -616,6 +619,9 @@ router.post(
       let mlResponse;
 
       try {
+        if (process.env.USE_API_ONLY === 'true' || process.env.RENDER === 'true') {
+          throw new Error('Skipping local ML models on Render, using API fallback immediately.');
+        }
         const response = await axios.post(`${mlServiceUrl}/infer`, formData, {
           timeout: 10000,
           headers: formData.getHeaders(),
@@ -744,6 +750,9 @@ router.post(
       let mlResponse;
 
       try {
+        if (process.env.USE_API_ONLY === 'true' || process.env.RENDER === 'true') {
+          throw new Error('Skipping local ML models on Render, using API fallback immediately.');
+        }
         const response = await axios.post(`${mlServiceUrl}/infer`, formData, {
           timeout: 15000,
           headers: formData.getHeaders(),
@@ -859,6 +868,9 @@ router.post(
       let mlResponse;
 
       try {
+        if (process.env.USE_API_ONLY === 'true' || process.env.RENDER === 'true') {
+          throw new Error('Skipping local ML models on Render, using API fallback immediately.');
+        }
         const response = await axios.post(`${mlServiceUrl}/infer`, formData, {
           timeout: 10000,
           headers: formData.getHeaders(),

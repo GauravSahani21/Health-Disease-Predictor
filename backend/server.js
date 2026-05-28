@@ -21,8 +21,19 @@ const logger = require('./utils/logger');
 app.use(helmet());
 
 // CORS configuration
+const allowedOrigins = [
+  process.env.FRONTEND_URL || 'http://localhost:3000',
+  'http://localhost:3000',
+  'http://localhost:3001',
+];
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || 'http://localhost:3001',
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   optionsSuccessStatus: 200,
 };
@@ -114,18 +125,20 @@ app.use(errorHandler);
 // MongoDB connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/health_predictor';
 
-mongoose
-  .connect(MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    logger.info('Connected to MongoDB');
-  })
-  .catch((error) => {
-    logger.error('MongoDB connection error:', error);
-    process.exit(1);
-  });
+const connectWithRetry = () => {
+  mongoose
+    .connect(MONGODB_URI, {
+      serverSelectionTimeoutMS: 10000,
+    })
+    .then(() => {
+      logger.info('Connected to MongoDB');
+    })
+    .catch((error) => {
+      logger.error('MongoDB connection failed, retrying in 10s...', { message: error.message });
+      setTimeout(connectWithRetry, 10000);
+    });
+};
+connectWithRetry();
 
 // Graceful shutdown
 process.on('SIGTERM', () => {
