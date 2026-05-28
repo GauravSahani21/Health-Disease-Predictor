@@ -85,7 +85,7 @@ app.get('/health', (req, res) => {
 
 // Serve frontend static files in production
 if (process.env.NODE_ENV === 'production') {
-  const frontendBuildPath = path.join(__dirname, '../frontend/dist');
+  const frontendBuildPath = path.join(__dirname, 'frontend/dist');
   
   // Debug endpoint
   app.get('/api/debug-files', (req, res) => {
