@@ -86,6 +86,19 @@ app.get('/health', (req, res) => {
 // Serve frontend static files in production
 if (process.env.NODE_ENV === 'production') {
   const frontendBuildPath = path.join(__dirname, '../frontend/dist');
+  
+  // Debug endpoint
+  app.get('/api/debug-files', (req, res) => {
+    const fs = require('fs');
+    try {
+      const files = fs.readdirSync(frontendBuildPath);
+      const assets = fs.existsSync(path.join(frontendBuildPath, 'assets')) ? fs.readdirSync(path.join(frontendBuildPath, 'assets')) : [];
+      res.json({ frontendBuildPath, files, assets });
+    } catch (e) {
+      res.json({ frontendBuildPath, error: e.message });
+    }
+  });
+
   app.use(express.static(frontendBuildPath));
   
   // Catch-all route to serve the React index.html for client-side routing
